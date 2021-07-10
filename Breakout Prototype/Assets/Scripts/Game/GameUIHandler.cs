@@ -16,6 +16,11 @@ namespace Rox.BreakOut
 			scoreDisplay.text = string.Format ("Score: {0}", score);
 		}
 
+		public void UpdateTime (float time)
+		{
+			timeDisplay.text = string.Format ("Time: {0}", time);
+		}
+
 	}
 
 }

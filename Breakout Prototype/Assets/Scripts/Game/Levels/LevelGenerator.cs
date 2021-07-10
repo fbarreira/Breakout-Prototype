@@ -13,30 +13,18 @@ namespace Rox.BreakOut
 
 		public int BlocksTotal { get; private set; }
 
-		int _currentLevel = 1;
-
-		void Awake ()
+		public void Setup (int currentLevel)
 		{
+			var map = database.GetMap (currentLevel);
 
-		}
-
-		void Start ()
-		{
-			PopulateLevel ();
-		}
-
-		private void PopulateLevel ()
-		{
-			var map = database.GetMap (_currentLevel);
-
-			Vector2 origin = new Vector2 (-4f, 3.5f);
+			Vector2 origin = new Vector2 (-4f, 8.75f);
 
 			float x = 0;
 			float y = 0;
 
 			for (int i = 0; i < map.GetLength (0); i++)
 			{
-				y = origin.y + 1 * i;
+				y = origin.y - .5f * i;
 
 				for (int j = 0; j < map.GetLength (1); j++)
 				{
@@ -55,7 +43,8 @@ namespace Rox.BreakOut
 
 			Instantiate (prefab, position, Quaternion.identity);
 
-			BlocksTotal++;
+			if (index < 6)
+				BlocksTotal++;
 		}
 
 		private GameObject GetBrickPrefab (int index) => (index > 0) ? brickPrefabs[index - 1] : null;

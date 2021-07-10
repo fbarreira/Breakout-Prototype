@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Rox.BreakOut
 {
@@ -33,6 +34,11 @@ namespace Rox.BreakOut
 		public void ReturnToMenu ()
 		{
 			SwitchWindows (levelsCanvas, mainCanvas);
+		}
+
+		public void PlayLevel ()
+		{
+			SceneManager.LoadScene ("Game");
 		}
 
 		private void SwitchWindows (CanvasGroup oldWindow, CanvasGroup newWindow)

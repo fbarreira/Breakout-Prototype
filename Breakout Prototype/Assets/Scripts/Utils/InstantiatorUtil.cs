@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 namespace JustKrated.Utils
 {
+	[DefaultExecutionOrder (-10)]
 	public class InstantiatorUtil : MonoSingleton<InstantiatorUtil>
 	{
 		readonly string persistentScene = "Persistent";

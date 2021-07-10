@@ -12,23 +12,25 @@ namespace Rox.BreakOut
 		Over
 	}
 
-	public class GameManager : MonoBehaviour
+	public class GameManager : MonoSingleton<GameManager>
 	{
+		[SerializeField] int maxTime = 600;
+
 		GameState _gameState;
 
+		int _currentLevel;
 		int _score;
 		int _blocksDestroyed;
-
+		int _timeLeft;
 
 		GameUIHandler ui;
 		LevelGenerator levelGenerator;
 
 		public delegate void HandleGameState ();
 
-		public static event HandleGameState OnGameWon;
-		public static event HandleGameState OnGameLost;
+		public static event HandleGameState OnGameOver;
 
-		void Awake ()
+		protected override void Init ()
 		{
 			ui = GetComponent<GameUIHandler> ();
 			levelGenerator = GetComponent<LevelGenerator> ();
@@ -38,7 +40,14 @@ namespace Rox.BreakOut
 
 		void Start ()
 		{
+			_currentLevel = PlayerPrefsUtil.GetInt (Constants.P_CurrentLevel, 1);
+			//_currentLevel = 1;
+			_timeLeft = maxTime;
 
+			ui.UpdateScore (0);
+			ui.UpdateTime (_timeLeft);
+
+			levelGenerator.Setup (_currentLevel);
 		}
 
 		private void OnEnable ()
@@ -57,6 +66,8 @@ namespace Rox.BreakOut
 		{
 			if (IsGameOver) return;
 
+			if (_timeLeft == 0) SetGameOver ();
+
 			ShootBall ();
 		}
 
@@ -66,6 +77,8 @@ namespace Rox.BreakOut
 			{
 				SetState (GameState.Playing);
 				EventManager.TriggerEvent (Constants.E_OnShootBall);
+
+				StartCoroutine (UpdateTimer ());
 			}
 		}
 
@@ -76,8 +89,7 @@ namespace Rox.BreakOut
 
 		private void HandleBallDestroyed ()
 		{
-			Debug.Log ("Game Over");
-			OnGameLost?.Invoke ();
+			SetGameOver ();
 		}
 
 		private void HandleBrickDestroyed (int points)
@@ -88,13 +100,35 @@ namespace Rox.BreakOut
 
 			if (_blocksDestroyed == levelGenerator.BlocksTotal)
 			{
-				OnGameWon?.Invoke ();
+				_score += _timeLeft;
+
+				SetGameOver ();
 			}
 		}
 
-		public bool IsGameSet => _gameState == GameState.Set;
-		public bool IsGamePlaying => _gameState == GameState.Playing;
-		public bool IsGameOver => _gameState == GameState.Over;
+		private IEnumerator UpdateTimer ()
+		{
+			while (IsGamePlaying)
+			{
+				_timeLeft--;
+				ui.UpdateTime (_timeLeft);
+
+				yield return new WaitForSeconds (1f);
+			}
+		}
+
+		private void SetGameOver ()
+		{
+			string player = PlayerPrefsUtil.GetString (Constants.P_PlayerName, "Player");
+			DataManager.UpdateLeaderboards (_currentLevel, player, _score);
+
+			SetState (GameState.Over);
+			OnGameOver?.Invoke ();
+		}
+
+		public static bool IsGameSet => Instance._gameState == GameState.Set;
+		public static bool IsGamePlaying => Instance._gameState == GameState.Playing;
+		public static bool IsGameOver => Instance._gameState == GameState.Over;
 
 
 	}

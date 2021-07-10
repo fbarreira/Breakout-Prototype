@@ -13,6 +13,9 @@ namespace Rox.BreakOut
         public const string T_Ball = "Ball";
 
         public const string E_OnShootBall = "OnShootBall";
+
+        public const string P_CurrentLevel = "CurrentLevel";
+        public const string P_PlayerName = "PlayerName";
     }
 
 }

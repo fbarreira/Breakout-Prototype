@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace Rox.BreakOut
 {
-
+	[System.Serializable]
 	public struct ScoreData
 	{
-		string playerName;
-		int score;
+		public string playerName;
+		public int score;
 
-		public string PlayerName => PlayerName;
+		public string PlayerName => playerName;
 		public int Score => score;
 
 		public ScoreData (string playerName, int score)

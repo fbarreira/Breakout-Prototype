@@ -8,7 +8,6 @@ namespace Rox.BreakOut
 	public class Paddle : MonoBehaviour
 	{
 		[SerializeField] float speed = 5f;
-		[SerializeField] GameObject ballProp;
 
 		bool _canMove = true;
 		float _input;
@@ -20,19 +19,14 @@ namespace Rox.BreakOut
 			_rigidBody = GetComponent<Rigidbody> ();
 		}
 
-		void Start ()
-		{
-
-		}
-
 		private void OnEnable ()
 		{
-			///TODO: Add listener to onGameOver
+			GameManager.OnGameOver += Lock;
 		}
 
 		private void OnDisable ()
 		{
-
+			GameManager.OnGameOver -= Lock;
 		}
 
 		void FixedUpdate ()
@@ -47,6 +41,11 @@ namespace Rox.BreakOut
 				_input = Input.GetAxis ("Horizontal");
 				_rigidBody.velocity = _input * speed * Vector2.right;
 			}
+		}
+
+		private void Lock ()
+		{
+			_canMove = false;
 		}
 	}
 

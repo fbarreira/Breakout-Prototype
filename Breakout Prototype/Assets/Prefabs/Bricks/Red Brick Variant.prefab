@@ -17,11 +17,11 @@ PrefabInstance:
       objectReference: {fileID: 3692554215755871526, guid: fcd77df2b6dfc324ea3dedeb695d34c5, type: 3}
     - target: {fileID: 2246784770634548016, guid: ee51b040ebb20084c807f0dc7502dfd3, type: 3}
       propertyPath: m_Name
-      value: Red Brick
+      value: Red Brick Variant
       objectReference: {fileID: 0}
     - target: {fileID: 2246784770634548016, guid: ee51b040ebb20084c807f0dc7502dfd3, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2246784770634548020, guid: ee51b040ebb20084c807f0dc7502dfd3, type: 3}
       propertyPath: m_RootOrder
